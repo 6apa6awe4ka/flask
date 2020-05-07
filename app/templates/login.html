@@ -1,0 +1,24 @@
+{% from "_helpers.html" import render_field, render_csrf_token_field %}
+{% extends "_base.html" %}
+
+{% block title %}Authorization{% endblock %}
+
+{% block body %}
+<div class="row" id="login-from">
+    <div class="col-md-4 col-md-offset-4">
+        <h3><p class="text-center">Authorization</p></h3>
+        <form action="" method="post">
+            {{ render_csrf_token_field(form) }}
+            <dl>
+                {{ render_field(form.email, class_="form-control") }}
+                {{ render_field(form.password, class_="form-control") }}
+            </dl>
+            <p><input type=submit class="btn btn-primary btn-block" value=Войти></p>
+            <p class="text-center">
+                <a href="{{ url_for('.RegistrationView:get') }}">Registration</a> |
+                <a href="{{ url_for('.LoginView:password_restore') }}">Password reset</a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}

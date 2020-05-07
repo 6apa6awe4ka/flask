@@ -1,0 +1,41 @@
+version: "3.1"
+
+services:
+  python:
+    container_name: python
+    # environment:
+    # - PYTHONUNBUFFERED=0
+    build:
+      context: .
+      dockerfile: ./docker/python/Dockerfile
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    volumes:
+      - ./app:/app
+    ports:
+      - 5000:5000
+    restart: always
+#    command: bash -c "while true; do sleep 5 ; echo 'background'; done"
+    command: bash -c "poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi && alembic upgrade head && python app.py"
+
+  postgres:
+    container_name: postgres
+    image: postgres:11.3-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    restart: always

@@ -1,0 +1,46 @@
+{% from "_helpers.html" import render_field, render_csrf_token_field %}
+{% extends "_base.html" %}
+
+{% block title %}Registration{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+       {% if not is_success %}
+          <div class="alert alert-danger">
+             <p class="text-center">
+                <strong>Error!</strong> Unexpected account registration error.
+             </p>
+          </div>
+       {% endif %}
+ 
+       {% if reg_done %}
+          <div class="alert alert-info">
+             <p class="text-center">
+                A registration confirmation email has been sent to your mail.
+             </p>
+          </div>
+       {% endif %}
+ 
+       <h3><p class="text-center">Registration</p></h3>
+       <form action="" method="post">
+          {{ render_csrf_token_field(form) }}
+          <dl>
+             {{ render_field(form.nickname, class_="form-control") }}
+             {{ render_field(form.email, class_="form-control") }}
+             {{ render_field(form.password, class_="form-control") }}
+             {{ render_field(form.password_verification, class_="form-control") }}
+          </dl>
+          <p><input type=submit class="btn btn-primary btn-block" value=Зарегистрироваться></p>
+          <p class="text-center">Already registered?
+             <a href="{{ url_for('.LoginView:get') }}">Authorization</a>
+          </p>
+          <p class="text-center">Didn’t receive an email with an account activation link?
+             <a href="{{ url_for('.LoginView:resend_confirmation_token') }}">
+                Resend a letter
+             </a>
+          </p>
+       </form>
+    </div>
+ </div>
+{% endblock %}
